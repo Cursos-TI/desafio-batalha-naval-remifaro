@@ -31,15 +31,43 @@ int podePosicionarVertical(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], 
     return 1;
 }
 
+int podePosicionarDiagonalPrincipal(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
+    if (linha + TAMANHO_NAVIO > TAMANHO_TABULEIRO || coluna + TAMANHO_NAVIO > TAMANHO_TABULEIRO) return 0;
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        if (tabuleiro[linha + i][coluna + i] != 0) return 0;
+    }
+    return 1;
+}
+
+int podePosicionarDiagonalSecundaria(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
+    if (linha + TAMANHO_NAVIO > TAMANHO_TABULEIRO || coluna - (TAMANHO_NAVIO - 1) < 0) return 0;
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        if (tabuleiro[linha + i][coluna - i] != 0) return 0;
+    }
+    return 1;
+}
+
 void posicionarNavioHorizontal(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
     for (int i = 0; i < TAMANHO_NAVIO; i++) {
-        tabuleiro[linha][coluna + i] = 3; // 3 = parte do navio
+        tabuleiro[linha][coluna + i] = 3;
     }
 }
 
 void posicionarNavioVertical(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
     for (int i = 0; i < TAMANHO_NAVIO; i++) {
-        tabuleiro[linha + i][coluna] = 3; // 3 = parte do navio
+        tabuleiro[linha + i][coluna] = 3;
+    }
+}
+
+void posicionarNavioDiagonalPrincipal(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        tabuleiro[linha + i][coluna + i] = 3;
+    }
+}
+
+void posicionarNavioDiagonalSecundaria(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        tabuleiro[linha + i][coluna - i] = 3;
     }
 }
 
@@ -54,56 +82,44 @@ void exibirTabuleiro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
 }
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
     int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
     inicializarTabuleiro(tabuleiro);
 
-    // Coordenadas definidas diretamente no código
-    int linhaHorizontal = 2, colunaHorizontal = 4;
-    int linhaVertical = 5, colunaVertical = 1;
+    // Coordenadas dos navios
+    int linhaH = 2, colunaH = 4;
+    int linhaV = 5, colunaV = 1;
+    int linhaDP = 0, colunaDP = 0; // Diagonal principal
+    int linhaDS = 0, colunaDS = 9; // Diagonal secundária
 
-    // Validação e posicionamento horizontal
-    if (podePosicionarHorizontal(tabuleiro, linhaHorizontal, colunaHorizontal)) {
-        posicionarNavioHorizontal(tabuleiro, linhaHorizontal, colunaHorizontal);
+    // Posicionar navio horizontal
+    if (podePosicionarHorizontal(tabuleiro, linhaH, colunaH)) {
+        posicionarNavioHorizontal(tabuleiro, linhaH, colunaH);
     } else {
-        printf("Erro: Não foi possível posicionar o navio horizontal.\n");
+        printf("Erro ao posicionar navio horizontal.\n");
     }
 
-    // Validação e posicionamento vertical
-    if (podePosicionarVertical(tabuleiro, linhaVertical, colunaVertical)) {
-        posicionarNavioVertical(tabuleiro, linhaVertical, colunaVertical);
+    // Posicionar navio vertical
+    if (podePosicionarVertical(tabuleiro, linhaV, colunaV)) {
+        posicionarNavioVertical(tabuleiro, linhaV, colunaV);
     } else {
-        printf("Erro: Não foi possível posicionar o navio vertical.\n");
+        printf("Erro ao posicionar navio vertical.\n");
     }
 
-    // Exibir tabuleiro
+    // Posicionar navio diagonal principal
+    if (podePosicionarDiagonalPrincipal(tabuleiro, linhaDP, colunaDP)) {
+        posicionarNavioDiagonalPrincipal(tabuleiro, linhaDP, colunaDP);
+    } else {
+        printf("Erro ao posicionar navio diagonal principal.\n");
+    }
+
+    // Posicionar navio diagonal secundária
+    if (podePosicionarDiagonalSecundaria(tabuleiro, linhaDS, colunaDS)) {
+        posicionarNavioDiagonalSecundaria(tabuleiro, linhaDS, colunaDS);
+    } else {
+        printf("Erro ao posicionar navio diagonal secundária.\n");
+    }
+
     exibirTabuleiro(tabuleiro);
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
 
     return 0;
 }
